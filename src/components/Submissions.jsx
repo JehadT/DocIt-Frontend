@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import api from "../utils/api";
-import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import transformDate from "../utils/transformDate";
+import LoadingTable from "./LoadingTable";
 
 export default function Submissions({ forms, setForms, setOriginalForms }) {
   const [loading, setLoading] = useState(true);
@@ -14,10 +14,9 @@ export default function Submissions({ forms, setForms, setOriginalForms }) {
   useEffect(() => {
     (async () => {
       try {
-        const response = await api.get("/getAllForms"); 
+        const response = await api.get("/getAllForms");
         setForms(response.data.forms);
         setOriginalForms(response.data.forms);
-        console.log(response.data.forms);
       } catch (error) {
         console.error("Error fetching user info:", error);
       } finally {
@@ -26,34 +25,50 @@ export default function Submissions({ forms, setForms, setOriginalForms }) {
     })();
   }, []);
   return (
-    <div className="div3">
-      {loading ? (
-        <h2>...جارِ التحميل</h2>
-      ) : forms.length === 0 ? (
-        <div className="no-forms">لا توجد مستندات</div>
-      ) : (
-        <table className="forms-table">
-          <thead>
+    <div className="overflow-x-auto rounded-lg p-6 w-full">
+      <table className="min-w-full bg-white border border-gray-200 rounded-lg table-fixed">
+        <thead>
+          <tr className="bg-[#29504D] text-white">
+            <th className="p-3 w-[10%]">رقم</th>
+            <th className="p-3 w-[25%]">الاسم</th>
+            <th className="p-3 w-[25%]">المسار</th>
+            <th className="p-3 w-[20%]">التاريخ</th>
+            <th className="p-3 w-[20%]">الحالة</th>
+          </tr>
+        </thead>
+        <tbody>
+          {loading ? (
+            <LoadingTable />
+          ) : forms.length === 0 ? (
             <tr>
-              <th>الحالة</th>
-              <th>التاريخ</th>
-              <th>المسار</th>
-              <th>الاسم</th>
+              <td
+                colSpan="5"
+                className="text-center font-bold text-gray-600 p-3 align-middle"
+              >
+                لا توجد مستندات
+              </td>
             </tr>
-          </thead>
-          <tbody>
-            {forms.map((item, index) => (
-              <tr key={item._id} onClick={() => handleRowClick(item._id)}>
-                <td>{item.status}</td>
-                <td>{transformDate(item.updatedAt)}</td>
-                <td>{item.track}</td>
-                <td>{item.trainee.name}</td>
-                <td>{index + 1}</td>
+          ) : (
+            forms.map((item, index) => (
+              <tr
+                key={item._id}
+                className="border-t hover:bg-gray-100 cursor-pointer"
+                onClick={() => handleRowClick(item._id)}
+              >
+                <td className="p-3 text-center">{index + 1}</td>
+                <td className="p-3 text-center">{item.trainee.name}</td>
+                <td className="p-3 text-center">{item.track}</td>
+                <td className="p-3 text-center">
+                  {transformDate(item.updatedAt)}
+                </td>
+                <td className="p-3 text-center">{item.status}</td>
               </tr>
-            ))}
-          </tbody>
-        </table>
-      )}
+            ))
+          )}
+        </tbody>
+      </table>
     </div>
   );
 }
+
+

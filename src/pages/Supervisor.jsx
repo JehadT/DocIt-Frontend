@@ -7,7 +7,7 @@ import api from "../utils/api";
 
 export default function Supervisor() {
   const [forms, setForms] = useState([]);
-  const [originalForms, setOriginalForms] = useState([])
+  const [originalForms, setOriginalForms] = useState([]);
   const [loading, setLoading] = useState(true);
   const [userInfo, setUserInfo] = useState(null);
 
@@ -24,7 +24,6 @@ export default function Supervisor() {
       try {
         const response = await api.get("/userInfo");
         setUserInfo(response.data);
-        console.log(response.data);
       } catch (error) {
         console.error("Error fetching user info:", error);
       } finally {
@@ -33,10 +32,20 @@ export default function Supervisor() {
     })();
   }, []);
   return (
-    <div className="parent">
-      <UserInfo userInfo={userInfo} loading={loading} />
-      <SearchFilter setForms={setForms} originalForms={originalForms} />
-      <Submissions forms={forms} setForms={setForms} setOriginalForms={setOriginalForms} />
+    <div className="container mx-auto sm:mt-8 p-8 min-h-screen">
+      <div className="flex flex-col md:flex-row justify-between">
+        <UserInfo userInfo={userInfo} loading={loading} />
+        <div className="border-t border-gray-300 my-4 sm:hidden" />
+        <SearchFilter setForms={setForms} originalForms={originalForms} />
+      </div>
+      <div className="mt-2">
+        <div className="border-t border-gray-300 my-4 sm:hidden" />
+        <Submissions
+          forms={forms}
+          setForms={setForms}
+          setOriginalForms={setOriginalForms}
+        />
+      </div>
     </div>
   );
 }

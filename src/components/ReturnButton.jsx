@@ -21,7 +21,6 @@ export default function ReturnButton({ formId }) {
       setSupervisorComments("");
       setIsOpen(false);
       navigate("/supervisor");
-      console.log("returned");
     } catch (error) {
       console.error("Error:", error);
     }
@@ -29,19 +28,25 @@ export default function ReturnButton({ formId }) {
 
   return (
     <div className="text-center">
-      <button className="btn btn-primary" onClick={() => setIsOpen(true)}>
+      {/* Return Button */}
+      <button
+        className="px-6 py-2 w-full md:flex-1 bg-gray-400 text-white font-semibold rounded-xl hover:bg-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-200"
+        onClick={() => setIsOpen(true)}
+      >
         إرجاع للتعديل
       </button>
 
+      {/* Modal */}
       {isOpen && (
-        <div className="modal">
-          <div className="modal-dialog">
-            <div className="modal-header">
-              {error && <h5 className="error-text">{error}</h5>}
+        <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-50">
+          <div className="bg-white p-8 rounded-lg shadow-lg w-80">
+            <div className="text-center">
+              {error && <p className="text-red-500 font-bold text-sm">{error}</p>}
             </div>
-            <div className="modal-body">
+            <div className="mt-4">
               <input
-                placeholder="...سبب الترجيع"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+                placeholder="سبب الترجيع..."
                 value={supervisorComments}
                 onChange={(e) => {
                   setSupervisorComments(e.target.value);
@@ -49,19 +54,22 @@ export default function ReturnButton({ formId }) {
                 }}
               />
             </div>
-            <div className="modal-footer">
-              <button className="btn btn-success" onClick={handleReturning}>
-                متابعة
-              </button>
+            <div className="flex justify-center gap-4 mt-6">
               <button
-                className="btn btn-danger"
+                className="px-4 py-2 bg-gray-500 text-white font-semibold rounded-lg shadow-md hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-400"
                 onClick={() => {
                   setIsOpen(false);
                   setError("");
-                  setSupervisorComments('')
+                  setSupervisorComments("");
                 }}
               >
                 رجوع
+              </button>
+              <button
+                className="px-4 py-2 bg-blue-500 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                onClick={handleReturning}
+              >
+                إرسال
               </button>
             </div>
           </div>

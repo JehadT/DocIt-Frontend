@@ -22,13 +22,8 @@ export default function Trainee() {
       try {
         const response = await api.get("/userInfo");
         const form = await api.get('/getFormByTraineeId')
-        
         setUserInfo(response.data);
-        console.log(response.data);
-        
         setForm(form.data)
-        console.log(form.data);
-
       } catch (error) {
         console.error("Error fetching user info:", error);
       } finally {
@@ -38,7 +33,7 @@ export default function Trainee() {
   }, [update]);
 
   return (
-    <div className="parent">
+    <div className="min-h-screen">
       <UserInfo userInfo={userInfo} loading={loading} />
       <TraineeForm userInfo={userInfo} loading={loading} setUpdate={setUpdate} form={form} />
     </div>

@@ -2,46 +2,36 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import api from "../utils/api";
 import AttachmentsList from "../components/AttachmentsList";
-import DeclineButton from "../components/DeclineButton";
+import FormButton from "../components/FormButton";
 import ReturnButton from "../components/ReturnButton";
-import ApproveButton from "../components/ApproveButton";
 import DownloadAllFilesButton from "../components/DownloadAllFilesButton";
-
+import Loading from "../components/Loading";
 
 export default function Form() {
   const { id } = useParams();
-  const [form, setForm] = useState([]);
-  const [trainee, setTrainee] = useState([]);
+  const [form, setForm] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [showApproveButton, setShowApproveButton] = useState(true)
-  const [showDeclineButton, setShowDeclineButton] = useState(true)
-  const [showReturnButton, setShowReturnButton] = useState(true)
-
   const navigate = useNavigate();
+
   useEffect(() => {
     (async () => {
       try {
-        const response = await api.get(`/getForm/${id}`); 
-        setTrainee(response.data.trainee);
+        const response = await api.get(`/getForm/${id}`);
         setForm(response.data);
-        console.log(response.data.trainee);
-        console.log(response.data);
       } catch (error) {
-        console.error("Error fetching user info:", error);
+        console.error("Error fetching form data:", error);
       } finally {
         setLoading(false);
       }
     })();
-  }, []);
+  }, [id]);
 
   const handleApproval = async () => {
     try {
       await api.patch(`/approveForm/${id}`);
       navigate("/supervisor");
-      setShowApproveButton(false)
-      console.log("approved");
     } catch (error) {
-      console.error("Error:", error);
+      console.error("Error approving form:", error);
     }
   };
 
@@ -49,47 +39,94 @@ export default function Form() {
     try {
       await api.patch(`/declineForm/${id}`);
       navigate("/supervisor");
-      console.log("declined");
     } catch (error) {
-      console.error("Error:", error);
+      console.error("Error declining form:", error);
     }
   };
 
-
+  if (loading) return <Loading />;
+  if (!form) return <p>تعذر تحميل البيانات.</p>;
 
   return (
-    <div className="parent2">
-      <div className="form-div3">
-        {loading ? (
-          <h1>...جارِ التحميل</h1>
-        ) : (
-          <>
-          
-            <div className="form-div1">
-              <h1>معلومات المتدرب</h1>
-              <p><strong>الاسم:</strong> {trainee.name}</p>
-              <p>{trainee.email} <strong>:الإيميل</strong></p>
-              <p><strong>الجنس:</strong> {trainee.gender}</p>
-              <p>{trainee.nationalId} <strong>:رقم الهوية</strong></p>
-              <p>0{trainee.phoneNumber} <strong>:رقم الجوال</strong></p>
-              <p>{trainee.track} <strong>:المسار</strong></p>
-              <p><strong>التخصص الجامعي:</strong> {trainee.major}</p>
+    <div className="min-h-screen p-4">
+      <div className="max-w-3xl mx-auto p-6 flex flex-col text-[#29504D] rounded mt-8 mb-4">
+        <h2 className="text-2xl text-center font-bold mb-8">معلومات المتدرب</h2>
+        <div className="flex text-center flex-row gap-2 w-full">
+          <div className="flex flex-col gap-2 w-full">
+            <div className="flex flex-col gap-2 w-full">
+              <strong>الاسم:</strong>
+              <p>{form.trainee?.name}</p>
             </div>
-            <div className="form-div2">
-              <h1>مستندات المتدرب</h1>
-              <DownloadAllFilesButton form={form}/>
-              <AttachmentsList attachments={form.attachments} />
-              <ApproveButton
-                handleClick={handleApproval}
-                showApproveButton={showApproveButton}
-              />
-              <ReturnButton formId={id}/>
-              <DeclineButton handleClick={handleDeclining} />
-              <p>الحالة: {form.status}</p>
-              {form?.supervisorComments && <p>السبب: {form.supervisorComments}</p>}
-              </div>
-          </>
-        )}
+
+            <div className="flex flex-col gap-2 w-full">
+              <strong>المسار:</strong>
+              <p>{form.trainee?.track}</p>
+            </div>
+            <div className="flex flex-col gap-2 w-full">
+              <strong>التخصص الجامعي:</strong>
+              <p>{form.trainee?.major}</p>
+            </div>
+          </div>
+
+          <div className="flex flex-col gap-2 w-full">
+            <div className="flex flex-col gap-2 w-full">
+              <strong>رقم الهوية:</strong>
+              <p>{form.trainee?.nationalId}</p>
+            </div>
+            <div className="flex flex-col gap-2 w-full">
+              <strong>رقم الجوال:</strong>
+              <p>0{form.trainee?.phoneNumber}</p>
+            </div>
+            <div className="flex flex-col gap-2 w-full">
+              <strong>الإيميل:</strong>
+              <p>{form.trainee?.email}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="max-w-2xl mx-3 sm:mx-auto p-5 md:p-16 text-[#29504D] shadow-md rounded-3xl border border-[#E0E0E0] bg-white mb-8">
+
+        <h1 className="text-2xl font-bold text-center mb-6">مستندات المتدرب</h1>
+
+        <div className="flex justify-between items-center mb-6 sm:mb-4">
+          <div className="flex flex-col sm:gap-1 items-start font-bold">
+            <p>الحالة:</p>
+            <p className="text-black">{form.status}</p>
+
+            <div className="flex flex-col sm:gap-1 items-start font-bold mt-4">
+              {form.supervisorComments && (
+                <>
+                  <p>السبب:</p>
+                  <p className="text-black">{form.supervisorComments}</p>
+                </>
+              )}
+            </div>
+          </div>
+          <DownloadAllFilesButton form={form} />
+        </div>
+
+        {/* Attachments List */}
+        <AttachmentsList attachments={form.attachments} />
+
+        {/* Buttons below AttachmentsList, aligned left */}
+        <div className="flex flex-col-reverse md:flex-row justify-center gap-4 w-full mt-6">
+          <FormButton
+            buttonName={"رفض"}
+            classes={
+              "px-6 py-2 w-full md:flex-1 bg-red-400 text-white font-semibold rounded-xl hover:bg-red-500 focus:outline-none focus:ring-2 focus:ring-red-300"
+            }
+            handleClick={handleDeclining}
+          />
+          <ReturnButton formId={id} />
+          <FormButton
+            buttonName={"موافقة"}
+            classes={
+              "px-6 py-2 w-full md:flex-1 bg-green-400 text-white font-semibold rounded-xl hover:bg-green-500 focus:outline-none focus:ring-2 focus:ring-green-400"
+            }
+            handleClick={handleApproval}
+          />
+        </div>
       </div>
     </div>
   );

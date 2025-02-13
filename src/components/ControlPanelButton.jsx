@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 
-export default function ControlPanelButton() {
+export default function ControlPanelButton({ handleClosingMenu }) {
   const navigate = useNavigate();
   const handleClick = () => {
     localStorage.getItem("userType") == 1
@@ -8,8 +8,18 @@ export default function ControlPanelButton() {
       : navigate("/trainee");
   };
   return (
-    <button onClick={handleClick}>
-      {localStorage.getItem("userType") == 1 ? <p>لوحة التحكم</p> : <p>المستندات</p>}
+    <button
+      className="text-[#29504D] cursor-pointer hover:scale-102 font-bold"
+      onClick={() => {
+        handleClick();
+        handleClosingMenu;
+      }}
+    >
+      {localStorage.getItem("userType") == 1 ? (
+        <p>لوحة التحكم</p>
+      ) : (
+        <p>المستندات</p>
+      )}
     </button>
   );
 }
