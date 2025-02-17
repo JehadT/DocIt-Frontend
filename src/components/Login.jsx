@@ -34,6 +34,7 @@ const Login = ({
         setShowPopup(false);
         setEmail("");
         setPassword("");
+        handleClosingMenu();
         response.data.user.userType == 1
           ? navigate("/supervisor")
           : navigate("/trainee");
@@ -134,9 +135,7 @@ const Login = ({
               </div>
               <button
                 type="submit"
-                className="w-full bg-[#29504D] font-bold cursor-pointer text-white py-2 rounded mt-5"
-                onClick={handleClosingMenu}
-              >
+                className="w-full bg-[#29504D] font-bold cursor-pointer text-white py-2 rounded mt-5"              >
                 تسجيل الدخول
               </button>
             </form>

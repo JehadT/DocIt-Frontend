@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { DocumentCheckIcon, UserGroupIcon } from "@heroicons/react/24/outline";
-import homePhoto from "../assets/homePhoto.png";
+import FakhoorImage from "../components/FakhoorImage";
+
 
 function Home() {
   const [isLoaded, setIsLoaded] = useState(false);
@@ -14,13 +15,7 @@ function Home() {
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:mt-20 flex-grow">
         <div className="flex flex-col-reverse lg:flex-row items-center gap-8 md:gap-36">
           {/* Right side - Text */}
-          <div
-            className={`lg:w-1/2 text-right transition-all duration-700 ${
-              isLoaded
-                ? "opacity-100 translate-x-0"
-                : "opacity-0 translate-x-10"
-            }`}
-          >
+          <div className={"lg:w-1/2 text-right"}>
             <h2 className="text-3xl font-bold text-[#29504D] sm:text-4xl mb-8">
               قدم ملفاتك بسهولة
             </h2>
@@ -28,10 +23,10 @@ function Home() {
               {/* Trainee Card */}
               <div
                 className={
-                  "group w-full p-6 rounded-xl shadow-sm border-2 transition-all duration-300 hover:shadow-lg text-right flex items-center gap-4 border-gray-200 bg-white hover:border-primary-200"
+                  "group w-full p-6 rounded-xl shadow-sm border-2 hover:shadow-lg text-right flex items-center gap-4 border-gray-200 bg-white hover:border-primary-200"
                 }
               >
-                <DocumentCheckIcon className="w-12 h-12 text-primary-600 transition-transform duration-300 group-hover:scale-110 animate-float shrink-0" />
+                <DocumentCheckIcon className="w-12 h-12 text-primary-600 group-hover:scale-110 " />
                 <div>
                   <h3 className="text-xl font-semibold text-gray-900 mb-1">
                     بوابة للمتدرب
@@ -44,12 +39,11 @@ function Home() {
               {/* Supervisor Card */}
               <div
                 className={
-                  "group w-full p-6 rounded-xl shadow-sm border-2 transition-all duration-300 hover:shadow-lg text-right flex items-center gap-4 border-gray-200 bg-white hover:border-primary-200"
+                  "group w-full p-6 rounded-xl shadow-sm border-2 hover:shadow-lg text-right flex items-center gap-4 border-gray-200 bg-white hover:border-primary-200"
                 }
               >
                 <UserGroupIcon
-                  className="w-12 h-12 text-primary-600 transition-transform duration-300 group-hover:scale-110 animate-float shrink-0"
-                  style={{ animationDelay: "2s" }}
+                  className="w-12 h-12 text-primary-600 group-hover:scale-110"
                 />
                 <div>
                   <h3 className="text-xl font-semibold text-gray-900 mb-1">
@@ -64,17 +58,14 @@ function Home() {
           </div>
           {/* Image */}
           <div
-            className={`lg:w-1/2 transition-all duration-700 ${
-              isLoaded
-                ? "opacity-100 translate-x-0"
-                : "opacity-0 -translate-x-10"
-            } lg:order-last`}
+            className={'lg:w-1/2'}
           >
-            <img
+            {/* <img
               src={homePhoto}
               alt="فخور"
-              className="w-full max-w-2xl mx-auto animate-float"
-            />
+              className="w-full max-w-2xl mx-auto"
+            /> */}
+            <FakhoorImage />
           </div>
         </div>
       </main>

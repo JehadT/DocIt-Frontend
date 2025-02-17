@@ -12,6 +12,7 @@ export default function Form() {
   const [form, setForm] = useState(null);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
+  const [error, setError] = useState("");
 
   useEffect(() => {
     (async () => {
@@ -86,7 +87,6 @@ export default function Form() {
       </div>
 
       <div className="max-w-2xl mx-3 sm:mx-auto p-5 md:p-16 text-[#29504D] shadow-md rounded-3xl border border-[#E0E0E0] bg-white mb-8">
-
         <h1 className="text-2xl font-bold text-center mb-6">مستندات المتدرب</h1>
 
         <div className="flex justify-between items-center mb-6 sm:mb-4">
@@ -101,13 +101,16 @@ export default function Form() {
                   <p className="text-black">{form.supervisorComments}</p>
                 </>
               )}
+              {error && (
+                <h1 className="text-center text-red-500 font-bold">{error}</h1>
+              )}
             </div>
           </div>
-          <DownloadAllFilesButton form={form} />
+          <DownloadAllFilesButton form={form} setError={setError} />
         </div>
 
         {/* Attachments List */}
-        <AttachmentsList attachments={form.attachments} />
+        <AttachmentsList attachments={form.attachments} setError={setError} />
 
         {/* Buttons below AttachmentsList, aligned left */}
         <div className="flex flex-col-reverse md:flex-row justify-center gap-4 w-full mt-6">

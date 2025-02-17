@@ -1,7 +1,8 @@
 import api from "../utils/api";
 import fileNames from "../utils/fileNames";
 
-const AttachmentsList = ({ attachments }) => {
+const AttachmentsList = ({ attachments, setError }) => {
+
   const handleDownload = async (id, fileName) => {
     try {
       const response = await api.get(`/downloadSingleFile/${id}`, {
@@ -15,7 +16,9 @@ const AttachmentsList = ({ attachments }) => {
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
+      setError('')
     } catch (error) {
+      setError('حدث خطأ ما')
       console.error("Error downloading the file:", error);
     }
   };

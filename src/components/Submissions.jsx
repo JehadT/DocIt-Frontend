@@ -25,7 +25,7 @@ export default function Submissions({ forms, setForms, setOriginalForms }) {
     })();
   }, []);
   return (
-    <div className="overflow-x-auto rounded-lg p-6 w-full">
+    <div className="overflow-x-auto rounded-lg md:p-6 w-full">
       <table className="min-w-full bg-white border border-gray-200 rounded-lg table-fixed">
         <thead>
           <tr className="bg-[#29504D] text-white">

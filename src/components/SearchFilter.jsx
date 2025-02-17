@@ -34,7 +34,7 @@ const SearchFilter = ({ setForms, originalForms }) => {
   };
 
   return (
-    <div className="rounded-lg p-6 w-full max-w-sm md:max-w-md lg:max-w-lg mx-auto md:mx-0">
+    <div className="rounded-lg md:p-6 w-full max-w-sm md:max-w-md lg:max-w-lg mx-auto md:mx-0">
       <h2 className="text-2xl font-bold text-[#29504D] mb-4 text-center">
         بحث
       </h2>
