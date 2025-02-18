@@ -10,7 +10,7 @@ import { useState } from "react";
 import PrivateSupervisorRoute from "./utils/PrivateSupervisorRoute";
 import PrivateTraineeRoute from "./utils/PrivateTraineeRoute";
 
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { HashRouter as Router, Routes, Route } from "react-router-dom";
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem("token"));
