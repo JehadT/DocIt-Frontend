@@ -23,7 +23,7 @@ export default function Supervisor() {
     (async () => {
       try {
         const response = await api.get("/userInfo");
-        setUserInfo(response.data);
+        setUserInfo(response.data);        
       } catch (error) {
         console.error("Error fetching user info:", error);
       } finally {

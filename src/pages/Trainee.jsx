@@ -23,7 +23,7 @@ export default function Trainee() {
         const response = await api.get("/userInfo");
         const form = await api.get('/getFormByTraineeId')
         setUserInfo(response.data);
-        setForm(form.data)
+        setForm(form.data)        
       } catch (error) {
         console.error("Error fetching user info:", error);
       } finally {

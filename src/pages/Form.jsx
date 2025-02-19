@@ -10,9 +10,14 @@ import Loading from "../components/Loading";
 export default function Form() {
   const { id } = useParams();
   const [form, setForm] = useState(null);
+  const [selectedFiles, setSelectedFiles] = useState([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
   const [error, setError] = useState("");
+  const [isClickedForReturned, setIsClickedForReturned] = useState(false);
+  const [showReasonButton, setShowReasonButton] = useState(false);
+  const [showButton, setShowButton] = useState(true);
+  const [showTellingMsg, setShowTellingMsg] = useState(false);
 
   useEffect(() => {
     (async () => {
@@ -26,6 +31,14 @@ export default function Form() {
       }
     })();
   }, [id]);
+
+  const handleShowCheckboxes = () => {
+    window.scrollTo({ top: 200, behavior: "smooth" });
+    setIsClickedForReturned(!isClickedForReturned);
+    setShowReasonButton(!showReasonButton);
+    setShowButton(!showButton);
+    setShowTellingMsg(!showTellingMsg);
+  };
 
   const handleApproval = async () => {
     try {
@@ -108,27 +121,64 @@ export default function Form() {
           </div>
           <DownloadAllFilesButton form={form} setError={setError} />
         </div>
-
+        {showTellingMsg && (
+          <h1 className="text-center text-red-500 font-bold md:my-4">
+            الرجاء إختيار الملفات المطلوب تعديلها
+          </h1>
+        )}
         {/* Attachments List */}
-        <AttachmentsList attachments={form.attachments} setError={setError} />
+        <AttachmentsList
+          attachments={form.attachments}
+          setError={setError}
+          selectedFiles={selectedFiles}
+          setSelectedFiles={setSelectedFiles}
+          isClickedForReturned={isClickedForReturned}
+          showButton={showButton}
+        />
 
         {/* Buttons below AttachmentsList, aligned left */}
         <div className="flex flex-col-reverse md:flex-row justify-center gap-4 w-full mt-6">
-          <FormButton
-            buttonName={"رفض"}
-            classes={
-              "px-6 py-2 w-full md:flex-1 bg-red-400 text-white font-semibold rounded-xl hover:bg-red-500 focus:outline-none focus:ring-2 focus:ring-red-300"
-            }
-            handleClick={handleDeclining}
-          />
-          <ReturnButton formId={id} />
-          <FormButton
-            buttonName={"موافقة"}
-            classes={
-              "px-6 py-2 w-full md:flex-1 bg-green-400 text-white font-semibold rounded-xl hover:bg-green-500 focus:outline-none focus:ring-2 focus:ring-green-400"
-            }
-            handleClick={handleApproval}
-          />
+          {showButton && (
+            <FormButton
+              buttonName={"رفض"}
+              classes={
+                "px-6 py-2 w-full md:flex-1 bg-red-400 text-white font-semibold rounded-xl hover:bg-red-500 focus:outline-none focus:ring-2 focus:ring-red-300"
+              }
+              handleClick={handleDeclining}
+            />
+          )}
+          <div className="text-center">
+            {showButton && (
+              <button
+                className="px-6 py-2 w-full md:flex-1 bg-gray-400 text-white text-center font-semibold rounded-xl hover:bg-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-200"
+                onClick={handleShowCheckboxes}
+              >
+                إرجاع للتعديل
+              </button>
+            )}
+          </div>
+          {showReasonButton && (
+            <div className="flex flex-col-reverse md:flex-row justify-center gap-4 w-full mt-6">
+              <div className="text-center">
+                <button
+                  className="px-6 py-2 w-full md:flex-1 bg-gray-400 text-white font-semibold rounded-xl hover:bg-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-200"
+                  onClick={handleShowCheckboxes}
+                >
+                  الخلف
+                </button>
+              </div>
+              <ReturnButton formId={id} selectedFiles={selectedFiles} />
+            </div>
+          )}
+          {showButton && (
+            <FormButton
+              buttonName={"موافقة"}
+              classes={
+                "px-6 py-2 w-full md:flex-1 bg-green-400 text-white font-semibold rounded-xl hover:bg-green-500 focus:outline-none focus:ring-2 focus:ring-green-400"
+              }
+              handleClick={handleApproval}
+            />
+          )}
         </div>
       </div>
     </div>

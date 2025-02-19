@@ -2,7 +2,7 @@ import { useState } from "react";
 import api from "../utils/api";
 import { useNavigate } from "react-router-dom";
 
-export default function ReturnButton({ formId }) {
+export default function ReturnButton({ formId, selectedFiles }) {
   const [isOpen, setIsOpen] = useState(false);
   const [supervisorComments, setSupervisorComments] = useState("");
   const [error, setError] = useState("");
@@ -16,7 +16,11 @@ export default function ReturnButton({ formId }) {
     }
     setError("");
     try {
-      const body = { supervisorComments };
+      const body = { supervisorComments, selectedFiles };
+      if (selectedFiles.length == 0) {
+        setError("مطلوب إختيار ملف واحد على الأقل")
+        return
+      }
       await api.patch(`/returnForm/${formId}`, body);
       setSupervisorComments("");
       setIsOpen(false);
@@ -30,10 +34,11 @@ export default function ReturnButton({ formId }) {
     <div className="text-center">
       {/* Return Button */}
       <button
-        className="px-6 py-2 w-full md:flex-1 bg-gray-400 text-white font-semibold rounded-xl hover:bg-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-200"
+        className="px-6 py-2 w-full md:flex-1 bg-green-400 text-white font-semibold rounded-xl hover:bg-green-500 focus:outline-none focus:ring-2 focus:ring-green-400 disabled:opacity-50 disabled:cursor-not-allowed"
         onClick={() => setIsOpen(true)}
+        disabled={selectedFiles.length == 0}
       >
-        إرجاع للتعديل
+        ذكر السبب
       </button>
 
       {/* Modal */}
